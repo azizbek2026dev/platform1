@@ -1,0 +1,17 @@
+{% extends "base.html" %}{% block title %}Foydalanuvchi kabineti{% endblock %}{% block content %}
+<p class="text-blue-700 text-sm font-bold">FOYDALANUVCHI KABINETI</p>
+<h1 class="text-3xl font-black text-blue-900 mb-2">Jurnal va murojaatlar</h1>
+<p class="text-slate-500 mb-5">Salom, {{ current_user.full_name }}. Bu yerda o‘z baholaringizni ko‘rishingiz va IT xizmatiga murojaat yuborishingiz mumkin.</p>
+<section class="bg-white border rounded-2xl p-5 mb-6">
+<h2 class="font-bold text-xl mb-3">📘 Mening baholarim</h2>
+{% if student %}
+<div class="overflow-x-auto"><table class="w-full text-sm"><thead class="bg-slate-50"><tr><th class="p-3 text-left">Sana</th><th class="p-3 text-left">Sinf</th><th class="p-3 text-left">Mavzu</th><th class="p-3 text-left">Chorak</th><th class="p-3 text-left">Baho</th><th class="p-3 text-left">Davomat</th></tr></thead><tbody>
+{% for row in grades %}<tr class="border-t"><td class="p-3">{{ row.lesson.date|datefmt }}</td><td class="p-3">{{ row.lesson.class_name }}</td><td class="p-3">{{ row.lesson.topic }}</td><td class="p-3">{{ row.lesson.quarter }}</td><td class="p-3 font-bold text-blue-700">{{ row.entry.grade if row.entry.grade else '—' }}</td><td class="p-3">{{ row.entry.attendance or '—' }}</td></tr>{% else %}<tr><td colspan="6" class="p-4 text-slate-400">Hozircha jurnal baholari yo‘q.</td></tr>{% endfor %}
+</tbody></table></div>
+{% else %}<p class="text-slate-500">Baholarni ko‘rish uchun administrator “O‘quvchilar” bo‘limidagi o‘quvchi ismini ro‘yxatdan o‘tishda kiritilgan to‘liq ism bilan bir xil qilib kiritsin.</p>{% endif %}
+</section>
+<section class="bg-white border rounded-2xl p-5 mb-6"><h2 class="font-bold text-xl mb-3">✉️ Murojaat yuborish</h2>
+<form method="post" class="space-y-3"><input name="title" required placeholder="Murojaat mavzusi" class="border rounded-xl p-3 w-full"><input name="room" placeholder="Xona" class="border rounded-xl p-3 w-full"><select name="priority" class="border rounded-xl p-3 w-full"><option>Past</option><option selected>O‘rta</option><option>Yuqori</option></select><textarea name="body" required placeholder="Muammoni yozing..." class="border rounded-xl p-3 w-full"></textarea><button class="bg-blue-700 text-white rounded-xl px-5 py-3 font-bold">Murojaat yuborish</button></form></section>
+<h2 class="font-bold text-xl mb-3">Mening murojaatlarim</h2>
+{% for t in tickets %}<article class="bg-white border rounded-2xl p-5 mb-3"><div class="flex justify-between gap-3"><b>{{ t.title }}</b><span class="text-sm text-blue-700">{{ t.status }}</span></div><p class="mt-2">{{ t.description }}</p><p class="text-xs text-slate-400 mt-3">{{ t.created_at.strftime('%d.%m.%Y %H:%M') }}</p></article>{% else %}<p class="text-slate-400">Hali murojaat yo‘q.</p>{% endfor %}
+{% endblock %}

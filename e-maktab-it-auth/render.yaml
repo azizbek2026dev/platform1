@@ -1,0 +1,23 @@
+databases:
+  - name: emaktab-it-db
+    plan: free
+    databaseName: emaktab_it
+    user: emaktab_it_user
+services:
+  - type: web
+    name: emaktab-it
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: emaktab-it-db
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+      - key: ADMIN_USERNAME
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false
